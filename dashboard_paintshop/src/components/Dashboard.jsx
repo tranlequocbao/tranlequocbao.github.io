@@ -116,6 +116,15 @@ function Dashboard() {
         outline: {
             border: 4,
             distance: 8,
+            style: {
+                stroke: 'blue',
+                strokeOpacity: 0.65,
+            },
+        },
+        theme: {
+            styleSheet: {
+                brandColor: 'blue',
+            },
         },
         wave: {
             length: 128,
@@ -126,6 +135,15 @@ function Dashboard() {
         outline: {
             border: 4,
             distance: 8,
+            style: {
+                stroke: '#cdc77d',
+                strokeOpacity: 0.65,
+            },
+        },
+        theme: {
+            styleSheet: {
+                brandColor: '#cdc77d',
+            },
         },
         wave: {
             length: 128,
@@ -137,16 +155,36 @@ function Dashboard() {
         outline: {
             border: 4,
             distance: 8,
+            style: {
+                stroke: '#eb1e5d',
+                strokeOpacity: 0.65,
+            },
+        },
+        theme: {
+            styleSheet: {
+                brandColor: '#eb1e5d',
+            },
         },
         wave: {
             length: 128,
         },
+
     };
     const configPBS = {
         percent: (dataLineProduct.length > 0 ? dataLineProduct.find(item => item.PROCESS_NO === 90).COUNT : 0) / dataTarget.pbs,
+
         outline: {
             border: 4,
             distance: 8,
+            style: {
+                stroke: '#FAAD14',
+                strokeOpacity: 0.65,
+            },
+        },
+        theme: {
+            styleSheet: {
+                brandColor: '#FAAD14',
+            },
         },
         wave: {
             length: 128,
@@ -172,9 +210,9 @@ function Dashboard() {
                         <div className="col name pted">
                             <div className="title title-column"><BookmarkBorderIcon style={{ marginRight: 10 }} /> PT/ED</div>
                             <div className="data-product">
-                                {`KH: ${dataTarget.pted}  -  SL: ${dataLineProduct.length > 0 ? dataLineProduct.find(item => item.PROCESS_NO === 20).COUNT : 0}`}
+                                {`TARGET: ${dataTarget.pted}  -  ACTUAL: ${dataLineProduct.length > 0 ? dataLineProduct.find(item => item.PROCESS_NO === 20).COUNT : 0}`}
                             </div>
-                            <div className="chartProductionDashboard">
+                            <div className="chartProductionDashboard" style={{ color: 'white' }}>
                                 <Liquid {...configPTED} statistic={{
                                     content: {
                                         formatter({ percent }) {
@@ -193,16 +231,20 @@ function Dashboard() {
                         <div className="col target" pvc>
                             <div className="title title-column"><VideoStableIcon style={{ marginRight: 10 }} />PVC</div>
                             <div className="data-product">
-                                {`KH: ${dataTarget.pvc}  -  SL: ${dataLineProduct.length > 0 ? dataLineProduct.find(item => item.PROCESS_NO === 50).COUNT : 0}`}
+                                {`TARGET: ${dataTarget.pvc}  -  ACTUAL: ${dataLineProduct.length > 0 ? dataLineProduct.find(item => item.PROCESS_NO === 50).COUNT : 0}`}
                             </div>
-                            <div className="chartProductionDashboard">
-                                <Liquid {...configPVC} statistic={{
-                                    content: {
-                                        formatter({ percent }) {
-                                            return Math.round(percent * 100) + "%";
+                            <div className="chartProductionDashboard"  >
+                                <Liquid
+                                    {...configPVC}
+                                    statistic={{
+                                        content: {
+                                            formatter({ percent }) {
+                                                return Math.round(percent * 100) + "%";
+                                            },
                                         },
-                                    },
-                                }} />
+
+                                    }}
+                                />
                             </div>
                             {/* <div className="title number">{dataLineProduct.length > 0 ? dataLineProduct.find(item => item.PROCESS_NO === 20).COUNT : 0}</div>
                             <div className="title number">{dataLineProduct.length > 0 ? dataLineProduct.find(item => item.PROCESS_NO === 50).COUNT : 0}</div>
@@ -213,7 +255,7 @@ function Dashboard() {
                         <div className="col actual paint">
                             <div className="title title-column"><OpacityIcon style={{ marginRight: 10 }} />PAINT</div>
                             <div className="data-product">
-                                {`KH: ${dataTarget.paint}  -  SL: ${dataLineProduct.length > 0 ? dataLineProduct.find(item => item.PROCESS_NO === 60).COUNT : 0}`}
+                                {`TARGET: ${dataTarget.paint}  -  ACTUAL: ${dataLineProduct.length > 0 ? dataLineProduct.find(item => item.PROCESS_NO === 60).COUNT : 0}`}
                             </div>
                             <div className="chartProductionDashboard">
                                 <Liquid {...configPAINT} statistic={{
@@ -233,7 +275,7 @@ function Dashboard() {
                         <div className="col actual pbs">
                             <div className="title title-column"><DoneAllIcon style={{ marginRight: 10 }} />IN PBS</div>
                             <div className="data-product">
-                                {`KH: ${dataTarget.pbs}  -  SL: ${dataLineProduct.length > 0 ? dataLineProduct.find(item => item.PROCESS_NO === 90).COUNT : 0}`}
+                                {`TARGET: ${dataTarget.pbs}  -  ACTUAL: ${dataLineProduct.length > 0 ? dataLineProduct.find(item => item.PROCESS_NO === 90).COUNT : 0}`}
                             </div>
                             <div className="chartProductionDashboard">
                                 <Liquid {...configPBS} statistic={{
@@ -262,7 +304,13 @@ function Dashboard() {
             <FloatButton icon={<SettingOutlined />} style={{ bottom: 10, right: 10 }} onClick={() => setOpenDraw(true)} />
             <Drawer title="Cấu hình thông tin hiển thị" placement="right" onClose={() => setOpenDraw(false)} open={openDraw} width={400} className="drawer">
                 <Divider className="divider" orientation="left">Nhập KH sản lượng</Divider>
-                <div className="name"></div>
+                <div className="col-config">
+                    <div className="name">Target of PT/ED</div>
+                    <div className="name">Target of PVC</div>
+                    <div className="name">Target of PAINT</div>
+                    <div className="name">Target of PBS</div>
+                </div>
+
             </Drawer>
         </div>
     )
