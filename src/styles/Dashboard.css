@@ -146,3 +146,12 @@
     /* đặt độ mờ */
 
 }
+.submitForm{
+      display: flex;
+      align-content: center;
+      justify-content: right;
+      margin-right: 10px;
+}
+.production{
+      font-family: 'Poppins',sans-serif;
+}
