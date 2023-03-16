@@ -16,11 +16,11 @@ function Dashboard() {
     const socketRef = React.useRef();
     const host = "http://113.174.246.52:7798"
     const [openDraw, setOpenDraw] = useState(false)
-    const [dataTarget,setDataTarget]=useState({
-        pted:0,
-        pvc:0,
-        paint:0,
-        pbs:0
+    const [dataTarget, setDataTarget] = useState({
+        pted: 0,
+        pvc: 0,
+        paint: 0,
+        pbs: 0
     })
     const [showAmount, setShowAmount] = useState({
         inWBS: 0,
@@ -98,10 +98,10 @@ function Dashboard() {
                 setDataLineProduct(newArray)
                 setDataTarget(
                     {
-                        pted:100,
-                        pvc:100,
-                        paint:100,
-                        pbs:100
+                        pted: 100,
+                        pvc: 100,
+                        paint: 100,
+                        pbs: 100
                     }
                 )
                 // let data = res.data.map((val,index)=>{
@@ -109,73 +109,50 @@ function Dashboard() {
                 // })
             })
     }
-    
-    const formatter = (val) => `${new Intl.NumberFormat().format(val * 100)}%`;
+
     ///// Cấu hình biểu đồ
     const configPTED = {
-        percent: (dataLineProduct.length > 0 ? dataLineProduct.find(item => item.PROCESS_NO === 20).COUNT : 0)/dataTarget.pted,
-       formatter:(val)=>console.log(val),
+        percent: (dataLineProduct.length > 0 ? dataLineProduct.find(item => item.PROCESS_NO === 20).COUNT : 0) / dataTarget.pted,
         outline: {
-          border: 4,
-          distance: 8,
+            border: 4,
+            distance: 8,
         },
         wave: {
-          length: 128,
+            length: 128,
         },
-      };
-      const configPVC = {
-        percent: (dataLineProduct.length > 0 ? dataLineProduct.find(item => item.PROCESS_NO === 50).COUNT : 0)/dataTarget.pvc,
-        shape: 'diamond',
+    };
+    const configPVC = {
+        percent: (dataLineProduct.length > 0 ? dataLineProduct.find(item => item.PROCESS_NO === 50).COUNT : 0) / dataTarget.pvc,
         outline: {
-          border: 4,
-          distance: 8,
+            border: 4,
+            distance: 8,
         },
         wave: {
-          length: 128,
+            length: 128,
         },
-      };
-      const configPAINT = {
-        percent: (dataLineProduct.length > 0 ? dataLineProduct.find(item => item.PROCESS_NO === 60).COUNT : 0)/dataTarget.paint,
-        shape: 'rect',
+    };
+    const configPAINT = {
+        percent: (dataLineProduct.length > 0 ? dataLineProduct.find(item => item.PROCESS_NO === 60).COUNT : 0) / dataTarget.paint,
+        //  shape: 'rect',
         outline: {
-          border: 4,
-          distance: 8,
+            border: 4,
+            distance: 8,
         },
         wave: {
-          length: 128,
+            length: 128,
         },
-        format: (value) => `${(value * 100).toFixed(0)}%`,
-      };
-      const configPBS = {
-        percent: (dataLineProduct.length > 0 ? dataLineProduct.find(item => item.PROCESS_NO === 90).COUNT : 0)/dataTarget.pbs,
-        shape: (x, y, width, height) => {
-            const path = [];
-            const w = Math.min(width, height);
-      
-            for (let i = 0; i < 5; i++) {
-              path.push([
-                i === 0 ? 'M' : 'L',
-                (Math.cos(((18 + i * 72) * Math.PI) / 180) * w) / 2 + x,
-                (-Math.sin(((18 + i * 72) * Math.PI) / 180) * w) / 2 + y,
-              ]);
-              path.push([
-                'L',
-                (Math.cos(((54 + i * 72) * Math.PI) / 180) * w) / 4 + x,
-                (-Math.sin(((54 + i * 72) * Math.PI) / 180) * w) / 4 + y,
-              ]);
-            }
-      
-            path.push(['Z']);
-            return path;
-          },
+    };
+    const configPBS = {
+        percent: (dataLineProduct.length > 0 ? dataLineProduct.find(item => item.PROCESS_NO === 90).COUNT : 0) / dataTarget.pbs,
         outline: {
-          border: 4,
-          distance: 8,
+            border: 4,
+            distance: 8,
         },
         wave: {
-          length: 128,
+            length: 128,
         },
-      };
+
+    };
     return (
         <div className="container">
             <div className="board">
@@ -195,10 +172,16 @@ function Dashboard() {
                         <div className="col name pted">
                             <div className="title title-column"><BookmarkBorderIcon style={{ marginRight: 10 }} /> PT/ED</div>
                             <div className="data-product">
-                            {`KH: ${dataTarget.pted}  -  SL: ${dataLineProduct.length > 0 ? dataLineProduct.find(item => item.PROCESS_NO === 20).COUNT : 0}`}
+                                {`KH: ${dataTarget.pted}  -  SL: ${dataLineProduct.length > 0 ? dataLineProduct.find(item => item.PROCESS_NO === 20).COUNT : 0}`}
                             </div>
                             <div className="chartProductionDashboard">
-                                <Liquid {...configPTED} />
+                                <Liquid {...configPTED} statistic={{
+                                    content: {
+                                        formatter({ percent }) {
+                                            return Math.round(percent * 100) + "%";
+                                        },
+                                    },
+                                }} />
                             </div>
 
                             {/* <div className="title">PT/ED</div>
@@ -207,13 +190,19 @@ function Dashboard() {
                             <div className="title">PBS</div> */}
 
                         </div>
-                        <div className="col target"pvc>
+                        <div className="col target" pvc>
                             <div className="title title-column"><VideoStableIcon style={{ marginRight: 10 }} />PVC</div>
                             <div className="data-product">
-                            {`KH: ${dataTarget.pvc}  -  SL: ${dataLineProduct.length > 0 ? dataLineProduct.find(item => item.PROCESS_NO === 50).COUNT : 0}`}
+                                {`KH: ${dataTarget.pvc}  -  SL: ${dataLineProduct.length > 0 ? dataLineProduct.find(item => item.PROCESS_NO === 50).COUNT : 0}`}
                             </div>
                             <div className="chartProductionDashboard">
-                                <Liquid {...configPVC} />
+                                <Liquid {...configPVC} statistic={{
+                                    content: {
+                                        formatter({ percent }) {
+                                            return Math.round(percent * 100) + "%";
+                                        },
+                                    },
+                                }} />
                             </div>
                             {/* <div className="title number">{dataLineProduct.length > 0 ? dataLineProduct.find(item => item.PROCESS_NO === 20).COUNT : 0}</div>
                             <div className="title number">{dataLineProduct.length > 0 ? dataLineProduct.find(item => item.PROCESS_NO === 50).COUNT : 0}</div>
@@ -222,33 +211,45 @@ function Dashboard() {
 
                         </div>
                         <div className="col actual paint">
-                            <div className="title title-column"><OpacityIcon style={{ marginRight: 10 }}/>PAINT</div>
+                            <div className="title title-column"><OpacityIcon style={{ marginRight: 10 }} />PAINT</div>
                             <div className="data-product">
-                            {`KH: ${dataTarget.paint}  -  SL: ${dataLineProduct.length > 0 ? dataLineProduct.find(item => item.PROCESS_NO === 60).COUNT : 0}`}
+                                {`KH: ${dataTarget.paint}  -  SL: ${dataLineProduct.length > 0 ? dataLineProduct.find(item => item.PROCESS_NO === 60).COUNT : 0}`}
                             </div>
                             <div className="chartProductionDashboard">
-                                <Liquid {...configPAINT}/>
+                                <Liquid {...configPAINT} statistic={{
+                                    content: {
+                                        formatter({ percent }) {
+                                            return Math.round(percent * 100) + "%";
+                                        },
+                                    },
+                                }} />
                             </div>
                             {/* <div className="title number">{dataLineProduct.length > 0 ? dataLineProduct.find(item => item.PROCESS_NO === 20).COUNT : 0}</div>
                             <div className="title number">{dataLineProduct.length > 0 ? dataLineProduct.find(item => item.PROCESS_NO === 50).COUNT : 0}</div>
                             <div className="title number">{dataLineProduct.length > 0 ? dataLineProduct.find(item => item.PROCESS_NO === 60).COUNT : 0}</div>
                             <div className="title number">{dataLineProduct.length > 0 ? dataLineProduct.find(item => item.PROCESS_NO === 90).COUNT : 0}</div>
                         */}
-                        </div> 
+                        </div>
                         <div className="col actual pbs">
                             <div className="title title-column"><DoneAllIcon style={{ marginRight: 10 }} />IN PBS</div>
                             <div className="data-product">
-                            {`KH: ${dataTarget.pbs}  -  SL: ${dataLineProduct.length > 0 ? dataLineProduct.find(item => item.PROCESS_NO === 90).COUNT : 0}`}
+                                {`KH: ${dataTarget.pbs}  -  SL: ${dataLineProduct.length > 0 ? dataLineProduct.find(item => item.PROCESS_NO === 90).COUNT : 0}`}
                             </div>
                             <div className="chartProductionDashboard">
-                                <Liquid {...configPBS}/>
+                                <Liquid {...configPBS} statistic={{
+                                    content: {
+                                        formatter({ percent }) {
+                                            return Math.round(percent * 100) + "%";
+                                        },
+                                    },
+                                }} />
                             </div>
                             {/* <div className="title number">{dataLineProduct.length > 0 ? dataLineProduct.find(item => item.PROCESS_NO === 20).COUNT : 0}</div>
                             <div className="title number">{dataLineProduct.length > 0 ? dataLineProduct.find(item => item.PROCESS_NO === 50).COUNT : 0}</div>
                             <div className="title number">{dataLineProduct.length > 0 ? dataLineProduct.find(item => item.PROCESS_NO === 60).COUNT : 0}</div>
                             <div className="title number">{dataLineProduct.length > 0 ? dataLineProduct.find(item => item.PROCESS_NO === 90).COUNT : 0}</div>
                         */}
-                        </div> 
+                        </div>
                     </div>
 
                 </div>
