@@ -1,6 +1,5 @@
 import React, { useEffect, useState, useRef, useLayoutEffect } from "react";
-import { Line, G2 } from "@ant-design/plots";
-import { each, findIndex } from "@antv/util";
+import { Line} from "@ant-design/plots";
 
 function Chart(props) {
     //get width of window
@@ -47,7 +46,7 @@ function Chart(props) {
             },
 
             tickInterval: 30,
-            max: type == "wbs" ? 250 : 400,
+            max: type === "wbs" ? 250 : 400,
             grid: null,
         },
         yField: "value",
@@ -66,7 +65,7 @@ function Chart(props) {
             aspecRatio: 1,
         },
         lineStyle: {
-            lineWidth: labels == 40 ? 15 : 5,
+            lineWidth: labels ===40 ? 15 : 5,
         },
         point: {
             size: 5,
@@ -103,7 +102,7 @@ function Chart(props) {
                     type: "hide-overlap",
                 },
             ],
-            formatter: ({ value }) => (value == 0 ? "" : value),
+            formatter: ({ value }) => (value ===0 ? "" : value),
             //
             style: {
                 textAlign: "left",
@@ -114,7 +113,7 @@ function Chart(props) {
         annotations: [
             {
                 type: "region",
-                start: ["min", type == "wbs" ? 50 : 100],
+                start: ["min", type === "wbs" ? 50 : 100],
                 end: ["max", "0"],
                 color: "#fff000",
                 style: {
@@ -123,8 +122,8 @@ function Chart(props) {
             },
             {
                 type: "line",
-                start: ["min", type == "wbs" ? 50 : 100],
-                end: ["max", type == "wbs" ? 50 : 100],
+                start: ["min", type === "wbs" ? 50 : 100],
+                end: ["max", type === "wbs" ? 50 : 100],
                 style: {
                     stroke: "#00FF00",
                     lineDash: [1, 1],
@@ -134,8 +133,8 @@ function Chart(props) {
 
             {
                 type: "line",
-                start: ["min", type == "wbs" ? 150 : 250],
-                end: ["max", type == "wbs" ? 150 : 250],
+                start: ["min", type === "wbs" ? 150 : 250],
+                end: ["max", type === "wbs" ? 150 : 250],
                 style: {
                     stroke: "#F4664A",
                     lineDash: [1, 1],
@@ -144,7 +143,7 @@ function Chart(props) {
             },
             {
                 type: "region",
-                start: ["min", type == "wbs" ? 150 : 250],
+                start: ["min", type === "wbs" ? 150 : 250],
                 end: ["max", "max"],
                 //color: '#fff000',
                 style: {
@@ -153,8 +152,8 @@ function Chart(props) {
             },
             {
                 type: "text",
-                position: ["min", type == "wbs" ? 50 : 100],
-                content: type == "wbs" ? "50" : "100",
+                position: ["min", type === "wbs" ? 50 : 100],
+                content: type === "wbs" ? "50" : "100",
                 offsetY: -10,
                 offsetX: 4,
                 style: {
@@ -164,8 +163,8 @@ function Chart(props) {
             },
             {
                 type: "text",
-                position: ["min", type == "wbs" ? 150 : 250],
-                content: type == "wbs" ? "150" : "250",
+                position: ["min", type === "wbs" ? 150 : 250],
+                content: type === "wbs" ? "150" : "250",
                 offsetY: -20,
                 offsetX: 4,
                 style: {

@@ -1,7 +1,6 @@
 import "./App.css";
 import React, { useEffect, useState } from "react";
-import { Row, Col, Card, column } from "antd";
-import { Column } from "@ant-design/plots";
+import { Row, Col, Card } from "antd";
 import "antd/dist/reset.css";
 import Chart from "./components/chart.jsx";
 import axios from "axios";
@@ -14,7 +13,6 @@ function App() {
       const [change, setChange] = useState(false)
       const [dataWBS, setDataWBS] = useState([]);
       const [dataDPU, setDataDPU] = useState([]);
-      const [dataFTT, setDataFTT] = useState([]);
       const [dataPBS, setDataPBS] = useState([]);
       const [objectSocket, setObjectSocket] = useState([]);
       const host = "http://113.174.246.52:7798";
@@ -47,21 +45,21 @@ console.log(numDays)
 
       ////useState cập nhật chiều rộng của cửa sổ     
       //
-      const [windowWidth, setWindowWidth] = useState(window.innerWidth);
+      //const [windowWidth, setWindowWidth] = useState(window.innerWidth);
 
       ///// kiểm tra thay đổi chiều rộng của cửa sổ
-      useEffect(() => {
-            function handleResize() {
-                  setWindowWidth(window.innerWidth);
-            }
-            window.addEventListener("resize", handleResize);
-            return () => window.removeEventListener("resize", handleResize);
-      }, []);
-      useEffect(() => {
-            getObjectSocket();
-            //connect socket
-            getData();
-      }, []);
+      // useEffect(() => {
+      //       function handleResize() {
+      //             setWindowWidth(window.innerWidth);
+      //       }
+      //       window.addEventListener("resize", handleResize);
+      //       return () => window.removeEventListener("resize", handleResize);
+      // }, []);
+      // useEffect(() => {
+      //       getObjectSocket();
+      //       //connect socket
+      //       getData();
+      // }, []);
 
       ////set ẩn hiện các biểu đồ
 
@@ -86,7 +84,7 @@ console.log(numDays)
             });
             objectSocket.map((val) => {
                   socketRef.current.on(val.name, (dataGot) => {
-                        if (val.name == "amountWBS" || val.name == "amountPBS") getData();
+                        if (val.name === "amountWBS" || val.name === "amountPBS") getData();
                         setShowAmount((showAmount) => ({
                               ...showAmount,
                               [val.name]: dataGot,
@@ -115,7 +113,7 @@ console.log(numDays)
                                     ...dataWBS,
                                     {
                                           year: `${i}`,
-                                          value: valueWBS.length == 0 ? 0 : valueWBS.amount,
+                                          value: valueWBS.length === 0 ? 0 : valueWBS.amount,
                                           category: "Số lượng BODY",
                                     },
                               ]);
@@ -124,7 +122,7 @@ console.log(numDays)
                                     ...dataPBS,
                                     {
                                           year: `${i}`,
-                                          value: valuePBS.length == 0 ? 0 : valuePBS.amount,
+                                          value: valuePBS.length === 0 ? 0 : valuePBS.amount,
                                           category: "Số lượng BODY",
                                     },
                               ]);
@@ -150,12 +148,13 @@ console.log(numDays)
                               ]);
                         }
                         Object.keys(rawData).map((val, index) => {
-                              if (rawData[val].timeStamp.substring(0, 2) == new Date().getDate()) {
+                              if (rawData[val].timeStamp.substring(0, 2) === new Date().getDate()) {
                                     setShowAmount((showAmount) => ({
                                           ...showAmount,
                                           [rawData[val].name]: rawData[val].amount,
                                     }));
                               }
+                              return val
                         });
                   });
       };
@@ -165,22 +164,23 @@ console.log(numDays)
             Object.keys(array).map((val) => {
                   if (
                         parseInt(array[val].timeStamp.substring(0, 2)) === i &&
-                        array[val].name == position
+                        array[val].name === position
                   ) {
                         value = array[val];
-                        return;
+                     
                   }
+                  return val
             });
 
             return value;
       };
-      const getObjectSocket = () => {
-            axios
-                  .post("http://113.174.246.52:7798/api/returnObjectSocket")
-                  .then((res) => {
-                        setObjectSocket(res.data);
-                  });
-      };
+      // const getObjectSocket = () => {
+      //       axios
+      //             .post("http://113.174.246.52:7798/api/returnObjectSocket")
+      //             .then((res) => {
+      //                   setObjectSocket(res.data);
+      //             });
+      // };
       return (
             <div className="App">
                   <Row className="row">
