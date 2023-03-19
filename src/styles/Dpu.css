@@ -1,0 +1,40 @@
+.dpu{
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+}
+.dpu-chart-main{
+      flex:1;
+      border-top-left-radius: 10px;
+      border-top-right-radius: 10px;
+      width: 100%;
+      border:1px solid black;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+}
+.dpu-chart-color{
+      width: 100%;
+      flex: 1;
+      display: flex;
+      border-bottom-left-radius: 10px;
+}
+.dpu-chart-mount-color{
+      border:1px solid black;
+      width: 50%;
+      padding:5px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+}
+.dpu-chart-ratio-color{
+      border:1px solid black;
+      width: 50%;
+      padding: 5px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      border-bottom-right-radius: 10px;
+}
+
