@@ -15,6 +15,7 @@ function Dashboard() {
       const [objectSocket, setObjectSocket] = useState([]);
       const socketRef = React.useRef();
       const host = "http://113.174.246.52:7798"
+      const hostMysql = "http://113.174.246.52:3005"
       const [openDraw, setOpenDraw] = useState(false)
       const [form] = Form.useForm()
       /// set type notification antd
@@ -61,19 +62,11 @@ function Dashboard() {
 
 
       useEffect(() => {
-            Promise.all([
-                  getData(),
-                  getObjectSocket(),
+           
+                  getData()
+                  getObjectSocket()
                   getDataDPUFTT()
-            ])
-                  .then(() => {
-
-                        // Tất cả các hàm đã thực thi xong
-                        // Cập nhật state hoặc thực hiện các thao tác cần thiết ở đây
-                  })
-                  .catch((error) => {
-                        console.log(error);
-                  });
+          
       }, [])
       //get Info from server by socket
       useEffect(() => {
@@ -87,9 +80,9 @@ function Dashboard() {
             });
             objectSocket.map((val) => {
                   socketRef.current.on(val.name, (dataGot) => {
-                        if (val.name ==="inPTED" || val.name === "amountPTED" || val.name === 'amountPaint' || val.name === 'amountPBS') {
-                              
-                              if(val.name==='amountPBS') getDataDPUFTT()
+                        if (val.name === "inPTED" || val.name === "amountPTED" || val.name === 'amountPaint' || val.name === 'amountPBS') {
+
+                              if (val.name === 'amountPBS') getDataDPUFTT()
                               getData();
                         }
                         // setShowAmount((showAmount) => ({
@@ -145,18 +138,66 @@ function Dashboard() {
                   })
       }
 
+      // const getDataDPUFTT = async () => {
+      //       let time = new Date()
+      //       axios
+      //             .post(`${host}/api/returnListVinDay`, { time })
+      //             .then(async (res) => {
+      //                   let data = res.data
+      //                   axios.post(`${hostMysql}/api/getDataErrorCar`, { data })
+      //                         .then(res => {
+      //                               let listCarError = res.data
+      //                               // Tạo mảng mới để chứa kết quả
+      //                               const newArray = [];
+
+      //                               // Duyệt qua các phần tử của array1
+      //                               data.forEach(item => {
+      //                                     // Tìm mã lỗi tương ứng trong array2
+      //                                     const errorItem = listCarError.find(error => error.error_code === item.VIN_CODE);
+
+      //                                     // Nếu tìm thấy mã lỗi, thêm các thuộc tính từ errorItem vào phần tử của array1
+      //                                     if (errorItem) {
+      //                                           item.error_type = errorItem.error_type;
+      //                                           item.error_type_count = errorItem.error_type_count;
+      //                                     }
+
+      //                                     // Thêm phần tử đã được cập nhật vào mảng mới
+      //                                     newArray.push(item);
+      //                               })
+      //                               console.log(newArray)
+      //                         })
+      //             });
+      // }
+
+      //chat gpt
       const getDataDPUFTT = async () => {
-            let time = new Date()
-            axios
-                  .post(`${host}/api/returnListVinDay`, { time })
-                  .then(async (res) => {
-                        let data = res.data
-                       axios.post(`http://10.40.12.4:3005/api/getDataErrorCar`,{data})
-                       .then(res=>{
-                        console.log(res.data)
-                       })
-                  });
-      };
+            try {
+                  const time = new Date();
+                  const response1 = await axios.post(`${host}/api/returnListVinDay`, { time });
+                  const data = response1.data;
+                  const response2 = await axios.post(`${hostMysql}/api/getDataErrorCar`, { data });
+                  const listCarError = response2.data;
+                  const newArray = [];
+                  const vinCodes = [];
+                  for (let item of data) {
+                        if (!vinCodes.includes(item.VIN_CODE)) {
+                              const errorItem = listCarError.find(error => error.error_code === item.VIN_CODE);      
+                              if (errorItem) {
+                                    item.error_type = errorItem.error_type;
+                                    item.error_type_count = errorItem.error_type_count;
+                              }
+                              newArray.push(item);
+                              vinCodes.push(item.VIN_CODE);
+                        }
+                  }
+                  console.log(newArray)
+                  setDataDPU(newArray)
+            } catch (error) {
+                  console.log(error);
+            }
+      }
+
+
 
       // const getvalue = async (array, day, position) => {
       //       let value = [];
@@ -219,12 +260,12 @@ function Dashboard() {
                         </div>
                   </div>
                   <div className="board">
-                        
-                              <ChartDPU value={{dataDPU,dataTarget}} />
-                
+
+                        <ChartDPU value={{ dataDPU, dataTarget }} />
+
                   </div>
                   <div className="board">
-                        <InformationProduct value={{dataTarget,dataLineProduct}}/>
+                        <InformationProduct value={{ dataTarget, dataLineProduct }} />
                   </div>
                   <div className="board ">
                         <div className="child-board downtime">
