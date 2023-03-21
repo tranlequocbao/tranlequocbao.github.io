@@ -1,7 +1,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@100;400&display=swap');
 
 .container {
-    background-color: #f2f2f2;
+    background-color:#525452 ;
     background-image: url('../assets/imgs/BG.JPG');
     background-repeat: no-repeat;
     background-size: cover;
@@ -17,7 +17,7 @@
     display: flex;
     width: 50%;
     height: 50%;
-    padding: 20px;
+    padding: 5px;
     flex-wrap: wrap;
 }
 
@@ -27,7 +27,7 @@
     box-shadow: rgba(0, 0, 0, 0.3) 0px 19px 38px,
         rgba(0, 0, 0, 0.22) 0px 15px 12px;
     border-radius: 10px;
-    padding: 20px;
+    padding: 5px;
     color: black;
     display: flex;
     flex-direction: column;
