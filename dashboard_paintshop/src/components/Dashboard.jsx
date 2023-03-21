@@ -28,27 +28,6 @@ function Dashboard() {
             paint: 0,
             pbs: 0
       })
-      // const [showAmount, setShowAmount] = useState({
-      //       inWBS: 0,
-      //       outWBS: 0,
-      //       amountWBS: 0,
-      //       emptyWBS: 0,
-      //       inPTED: 0,
-      //       amountPTED: 0,
-      //       bufferEDOVEN: 0,
-      //       EmptyBufferEDOVEN: 0,
-      //       passPVC: 0,
-      //       recoat: 0,
-      //       amountPaint: 0,
-      //       inPBS: 0,
-      //       outPBS: 0,
-      //       backLuxury: 0,
-      //       amountPBS: 0,
-      //       totalRecoat: 0,
-      //       CarError: 0,
-      //       CarGood: 0,
-      // });
-
 
       //notification antd  with type: success, info, warning, error
       const openNotificationWithIcon = (type, content) => {
@@ -60,13 +39,11 @@ function Dashboard() {
             });
       };
 
-
       useEffect(() => {
-           
-                  getData()
-                  getObjectSocket()
-                  getDataDPUFTT()
-          
+            getData()
+            getObjectSocket()
+            getDataDPUFTT()
+
       }, [])
       //get Info from server by socket
       useEffect(() => {
@@ -107,7 +84,8 @@ function Dashboard() {
                         targetPTED: dataTarget.targetPTED,
                         targetPVC: dataTarget.targetPVC,
                         targetPAINT: dataTarget.targetPAINT,
-                        targetPBS: dataTarget.targetPBS
+                        targetPBS: dataTarget.targetPBS,
+                        targetDPU:dataTarget.targetDPU
                   }
                   form.setFieldsValue(objectValue);
             }
@@ -138,37 +116,6 @@ function Dashboard() {
                   })
       }
 
-      // const getDataDPUFTT = async () => {
-      //       let time = new Date()
-      //       axios
-      //             .post(`${host}/api/returnListVinDay`, { time })
-      //             .then(async (res) => {
-      //                   let data = res.data
-      //                   axios.post(`${hostMysql}/api/getDataErrorCar`, { data })
-      //                         .then(res => {
-      //                               let listCarError = res.data
-      //                               // Tạo mảng mới để chứa kết quả
-      //                               const newArray = [];
-
-      //                               // Duyệt qua các phần tử của array1
-      //                               data.forEach(item => {
-      //                                     // Tìm mã lỗi tương ứng trong array2
-      //                                     const errorItem = listCarError.find(error => error.error_code === item.VIN_CODE);
-
-      //                                     // Nếu tìm thấy mã lỗi, thêm các thuộc tính từ errorItem vào phần tử của array1
-      //                                     if (errorItem) {
-      //                                           item.error_type = errorItem.error_type;
-      //                                           item.error_type_count = errorItem.error_type_count;
-      //                                     }
-
-      //                                     // Thêm phần tử đã được cập nhật vào mảng mới
-      //                                     newArray.push(item);
-      //                               })
-      //                               console.log(newArray)
-      //                         })
-      //             });
-      // }
-
       //chat gpt
       const getDataDPUFTT = async () => {
             try {
@@ -181,34 +128,21 @@ function Dashboard() {
                   const vinCodes = [];
                   for (let item of data) {
                         if (!vinCodes.includes(item.VIN_CODE)) {
-                              const errorItem = listCarError.find(error => error.error_code === item.VIN_CODE);      
+                              const errorItem = listCarError.find(error => error.error_code === item.VIN_CODE);
                               if (errorItem) {
                                     item.error_type = errorItem.error_type;
                                     item.error_type_count = errorItem.error_type_count;
+                                    newArray.push(item);
+                                    vinCodes.push(item.VIN_CODE);
                               }
-                              newArray.push(item);
-                              vinCodes.push(item.VIN_CODE);
                         }
                   }
-                  console.log(newArray)
                   setDataDPU(newArray)
             } catch (error) {
                   console.log(error);
             }
       }
 
-
-
-      // const getvalue = async (array, day, position) => {
-      //       let value = [];
-      //       for (const val of Object.values(array)) {
-      //             if (parseInt(val.timeStamp.substring(0, 2)) === day && val.name === position) {
-      //                   value = val;
-      //                   break;
-      //             }
-      //       }
-      //       return value;
-      // };
       /// return value of target production
       const getDataTargetProduction = async () => {
             axios.post(`${host}/api/getDataTargetProduction`)
@@ -220,7 +154,6 @@ function Dashboard() {
                               }, {});
                               setDataTarget(result)
                         }
-
                   })
       }
 
@@ -236,14 +169,10 @@ function Dashboard() {
                         })
                         .catch(error => {
                               openNotificationWithIcon('warning', error.toJSON().message)
-
                         })
             } catch (error) {
-
                   openNotificationWithIcon('error', error.toJSON().message)
-
             }
-
       };
       const onFinishFailed = (errorInfo) => {
 
@@ -256,20 +185,16 @@ function Dashboard() {
                   {contextHolder}
                   <div className="board">
                         <div className="child-board dpu">
-
                         </div>
                   </div>
                   <div className="board">
-
                         <ChartDPU value={{ dataDPU, dataTarget }} />
-
                   </div>
                   <div className="board">
                         <InformationProduct value={{ dataTarget, dataLineProduct }} />
                   </div>
                   <div className="board ">
                         <div className="child-board downtime">
-
                         </div>
                   </div>
                   <FloatButton icon={<SettingOutlined />} style={{ bottom: 10, right: 10 }} onClick={() => setOpenDraw(true)} />
@@ -339,7 +264,6 @@ function Dashboard() {
                                                       message: 'Please! Input number of production target',
                                                 },
                                           ]}
-
                                     >
                                           <InputNumber style={{ width: 100 }} />
                                     </Form.Item>
@@ -352,7 +276,18 @@ function Dashboard() {
                                                       message: 'Please! Input number of production target',
                                                 },
                                           ]}
-
+                                    >
+                                          <InputNumber style={{ width: 100 }} type />
+                                    </Form.Item>
+                                    <Form.Item
+                                          label="Target DPU"
+                                          name="targetDPU"
+                                          rules={[
+                                                {
+                                                      required: true,
+                                                      message: 'Please! Input number of DPU target',
+                                                },
+                                          ]}
                                     >
                                           <InputNumber style={{ width: 100 }} type />
                                     </Form.Item>
