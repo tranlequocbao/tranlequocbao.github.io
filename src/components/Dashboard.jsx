@@ -6,11 +6,13 @@ import { FloatButton, Drawer, Divider, Form, Button, notification, InputNumber }
 import { SettingOutlined } from '@ant-design/icons'
 import ChartDPU from "./ChartDPU";
 import InformationProduct from "./InformationProduct";
-
+import TimeDown from "./TimeDown";
+import { ResetTvSharp } from "@mui/icons-material";
 
 function Dashboard() {
       const [dataLineProduct, setDataLineProduct] = useState([])
       const [dataDPU, setDataDPU] = useState([])
+      const [dataTimeDown, setDataTimeDown] = useState([])
       // const [dataFTT, setDataFTT] = useState([])
       const [objectSocket, setObjectSocket] = useState([]);
       const socketRef = React.useRef();
@@ -43,7 +45,7 @@ function Dashboard() {
             getData()
             getObjectSocket()
             getDataDPUFTT()
-
+            getDataTimDown()
       }, [])
       //get Info from server by socket
       useEffect(() => {
@@ -85,7 +87,7 @@ function Dashboard() {
                         targetPVC: dataTarget.targetPVC,
                         targetPAINT: dataTarget.targetPAINT,
                         targetPBS: dataTarget.targetPBS,
-                        targetDPU:dataTarget.targetDPU
+                        targetDPU: dataTarget.targetDPU
                   }
                   form.setFieldsValue(objectValue);
             }
@@ -156,7 +158,17 @@ function Dashboard() {
                         }
                   })
       }
-
+      const getDataTimDown = async () => {
+            let time = new Date()
+       
+            axios.post(`${host}/api/getDataTimeDown`, { time }).then(res => {
+                  if(res.data==='null')
+                  setDataTimeDown([])
+                  else if(res.data.length>0)
+                  setDataTimeDown(res.data)
+                  else console.log(res.data)
+            })
+      }
       /// function Form antd
       const onFinish = (values) => {
             try {
@@ -184,14 +196,13 @@ function Dashboard() {
             <div className="container">
                   {contextHolder}
                   <div className="board">
-                        <div className="child-board dpu">
-                        </div>
+                        <InformationProduct value={{ dataTarget, dataLineProduct }} />
                   </div>
                   <div className="board">
                         <ChartDPU value={{ dataDPU, dataTarget }} />
                   </div>
                   <div className="board">
-                        <InformationProduct value={{ dataTarget, dataLineProduct }} />
+                        <TimeDown value={{dataTimeDown}}/>
                   </div>
                   <div className="board ">
                         <div className="child-board downtime">

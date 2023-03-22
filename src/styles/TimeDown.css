@@ -1,0 +1,25 @@
+.timeDown{
+    display: flex;
+   
+    justify-content: center;
+    align-items: center;
+}
+.dpu-timedown{
+    flex:1;
+    border-radius: 10px;
+    width: 100%;
+    border:1px solid black;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+.titleChartTimeDown{
+    margin-bottom: 5px;
+      font-size: 25px;
+      font-weight: bold;
+}
+.chartTimeDown{
+    width: 100%;
+    height: 100% !important;
+}

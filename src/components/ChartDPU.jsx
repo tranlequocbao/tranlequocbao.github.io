@@ -11,7 +11,6 @@ function ChartDPU(props) {
       // const [dataChart,setDataChart]=useState([])
       useEffect(() => {
             if (props.value.dataDPU.length > 0) {
-
                   getDataDPU(props.value.dataDPU, props.value.dataTarget.targetDPU)
                   getDataColor(props.value.dataDPU)
                   getDataColorRatio(props.value.dataDPU)
@@ -34,11 +33,21 @@ function ChartDPU(props) {
       const COLOR_COLOR = {
             '25D1': '#f2faf4',
             '46V': '#d60d0d',
-            '42M': '#2c2b63',
-            '41W': '#202021',
+            '42M': '#151E2E',
+            '41W': '#0E0E0E',
             '47S': '#979985',
-            '46G': '#40434a',
-            '47C': '#4054db'
+            '46G': '#6A6B6D',
+            '47C': '#4054db',
+            'M6MY':'#900C12',
+            'KWE': '#f2faf4',
+            'ELG':'#7A381B',
+            'KTV':'#060708',
+            'EVL':'#272B2E',
+            'EDZ':'#00497B',
+            'KCM':'#A56549',
+            'KLS':'#D16B00',
+            'EEG':'#225F8F'
+
       }
       const getDataDPU = (data, targetDPU) => {
             let mazda = []
@@ -113,15 +122,11 @@ function ChartDPU(props) {
                         amountErrorDirt = data.filter((value) => value.COLOR === val && new Date(value.PASS_DATETIME).getDate() === i).reduce((total, nextval) => total + parseInt(nextval.error_type_count), 0)
                         // console.log(amountColor)
                         //      console.log(amountErrorDirt)
-
-                        let ratio = () => {
-                              if (amountColor > 0)
-                                    return parseInt(amountErrorDirt / amountColor).toFixed(0)
-                              else return 0
-                        }
+                        let result =amountErrorDirt / amountColor
+                      
                         colorData.push({
                               name: `${val}`,
-                              amount: parseInt(amountErrorDirt / amountColor),
+                              amount:!result? 0:parseInt(amountErrorDirt / amountColor),
                               date: `${i}`
                         })
                         return val
