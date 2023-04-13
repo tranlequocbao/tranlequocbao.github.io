@@ -13,8 +13,9 @@
     justify-content: center;
     align-items: center;
     flex-direction: column;
+    padding:5px;
 }
-.titleChartTimeDown{
+.title-timedown{
     margin-bottom: 5px;
       font-size: 25px;
       font-weight: bold;
@@ -22,4 +23,71 @@
 .chartTimeDown{
     width: 100%;
     height: 100% !important;
+}
+.data-product{
+    display: flex;
+    justify-items: center;
+    align-items: center;
+}
+.infoValue{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+  
+}
+.index{
+    font-weight: bold;
+    font-size: 15px;
+
+}
+.target{
+    
+}
+.value-target{
+    font-size: 20px;
+    font-weight: bold;
+    color:green;
+    margin-bottom: 17px;
+}
+.value-actual{
+    font-size: 20px;
+    font-weight: bold;
+    color:red;
+    margin-bottom: 17px;
+}
+
+@media  screen and (max-width:1320px){
+    .index{
+        font-weight: bold;
+        font-size: 13px;
+    
+    }
+    .value-target{
+        font-size: 13px;
+        font-weight: bold;
+        color:green
+    }
+    .value-actual{
+        font-size: 13px;
+  
+    }
+}
+@media  screen and (min-width:1920px){
+    /* .index{
+        margin-bottom: 5px;
+    
+    }
+    .value-target{
+        margin: 0;
+    }
+    .value-actual{
+        font-size: 13px;
+  
+    }
+    .infoValue{
+
+        align-items: end;
+        margin: 0;
+    } */
 }
