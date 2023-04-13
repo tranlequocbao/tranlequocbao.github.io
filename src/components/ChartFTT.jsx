@@ -11,8 +11,8 @@ function ChartFTT(props) {
   useEffect(() => {
     getObjectSocket();
     getData();
-    console.log(props.socket);
-  }, [props.socket]);
+
+  }, []);
   useEffect(() => {
     socketRef.current = socketIoClient.connect(host);
     objectSocket.map((val) => {
@@ -22,7 +22,7 @@ function ChartFTT(props) {
         }
       });
     });
-  }, [objectSocket]);
+  }, [props.socket]);
   const getData = () => {
     axios.post(`${host}/api/getFTT`).then((res) => {
       let array = res.data;
