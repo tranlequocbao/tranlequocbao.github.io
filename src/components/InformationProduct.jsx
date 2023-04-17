@@ -19,7 +19,7 @@ function InformationProduct(props) {
       }, [props.value])
     const getAmountPBS=()=>{
 axios.post("http://113.174.246.52:7798/api/getAmountPBS").then(res=>{
-    console.log(res.data)
+
    setAmountPBS(res.data[0].amount)
 })
     }

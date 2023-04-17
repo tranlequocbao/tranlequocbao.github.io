@@ -41,7 +41,7 @@ function App() {
             new Date(new Date().getFullYear(), new Date().getMonth() + 1, 0).getDate()
       )
 numDays=parseInt(new Date().getDate())
-console.log(numDays)
+
 
       ////useState cập nhật chiều rộng của cửa sổ     
       //
@@ -77,7 +77,7 @@ console.log(numDays)
             socketRef.current = sockettIOClient.connect(host);
             // socketRef.current.on("connect", () => {});
             socketRef.current.on("connect", () => {
-                  console.log("connect", socketRef.current.connected);
+                 
                   // automatically join the room
                   socketRef.current.emit("joined");
                   getData();
@@ -158,7 +158,6 @@ console.log(numDays)
                         });
                   });
       };
-      // dataWBS&&console.log(dataWBS)
       const getvalue = async (array, i, position) => {
             var value = [];
             Object.keys(array).map((val) => {

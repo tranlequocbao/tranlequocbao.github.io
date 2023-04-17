@@ -8,7 +8,7 @@ function Chart(props) {
     useEffect(() => {
           setData(props.values);
     }, [props.values]);
-    // console.log(data)
+
     const type = props.type;
     // const { InteractionAction, registerInteraction, registerAction } = G2;
     const [labels, setLabels] = useState(15);
@@ -20,10 +20,10 @@ function Chart(props) {
             if (targetRef.current.offsetWidth > 1265) {
                 setLabels(30);
             }
-            console.log(targetRef.current.offsetWidth);
+     
         }
     }, [labels]);
-    // labels && console.log(labels)
+
     const config = {
         data,
         color: ["#000099", "#66ff33", "#ff0000"],
