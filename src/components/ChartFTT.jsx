@@ -83,7 +83,7 @@ function ChartFTT(props) {
             },
             style: {
                 fill: "#fff",
-                fontSize: 14,
+                fontSize: 12,
                 color: "black",
             },
             layout: [

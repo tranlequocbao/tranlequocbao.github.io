@@ -16,18 +16,20 @@ import ChartDPU from "./ChartDPU";
 import InformationProduct from "./InformationProduct";
 import TimeDown from "./TimeDown";
 import ChartFTT from "./ChartFTT";
-import { AutoFixOffSharp } from "@mui/icons-material";
+
 
 function Dashboard() {
       const [dataLineProduct, setDataLineProduct] = useState([]);
       const [dataDPU, setDataDPU] = useState([]);
-      const [dataDPUNoDirt,setDataDPUNoDirt]=useState([])
-      const [dataTimeDown, setDataTimeDown] = useState([]);
+      const [dataDPUNoDirt, setDataDPUNoDirt] = useState([])
+     
       // const [dataFTT, setDataFTT] = useState([])
       const [objectSocket, setObjectSocket] = useState([]);
       const socketRef = React.useRef();
       const host = "http://113.174.246.52:7798";
       const hostMysql = "http://113.174.246.52:3005";
+      // const host = "http://10.40.12.4:7798";
+      // const hostMysql = "http://10.40.12.4:3005";
       const [openDraw, setOpenDraw] = useState(false);
       const [form] = Form.useForm();
       /// set type notification antd
@@ -55,7 +57,7 @@ function Dashboard() {
             getData();
             getObjectSocket();
             getDataDPU();
-            getDataTimDown();
+            // getDataTimDown();
       }, []);
       //get Info from server by socket
       useEffect(() => {
@@ -66,6 +68,7 @@ function Dashboard() {
             });
             objectSocket.map((val) => {
                   socketRef.current.on(val.name, (dataGot) => {
+       
                         if (
                               val.name === "inPTED" ||
                               val.name === "amountPTED" ||
@@ -79,7 +82,7 @@ function Dashboard() {
                         }
 
                         if (val.name === "timeDownQC1K2" || val.name === "timeDownQC1K1")
-                              getDataTimDown();
+                             
                         if (val.name === 'straightaway' || val.name === 'toRepair')
                               setSocketFTT(val.name)
                   });
@@ -88,7 +91,7 @@ function Dashboard() {
 
       const getObjectSocket = () => {
             axios
-                  .post("http://113.174.246.52:7798/api/returnObjectSocket")
+                  .post(`${host}/api/returnObjectSocket`)
                   .then((res) => {
                         res.data.push({ name: "targetProduction" });
                         setObjectSocket(res.data);
@@ -108,7 +111,6 @@ function Dashboard() {
             }
       }, [dataTarget]);
 
-      //xử lý dữ liệu từ server
       const getData = async () => {
             /// get Production form each Line in RFID Paint Shop
             const getTimeNow = new Date();
@@ -136,51 +138,55 @@ function Dashboard() {
       const getDataDPU = async () => {
             try {
                   const time = new Date();
-                  const response1 = await axios.post(`${host}/api/returnListVinDay`, {
-                        time,
-                  });
-                  const data = response1.data;
-                  const response2 = await axios.post(`${hostMysql}/api/getDataErrorCar`, {
-                        data,
-                  });
-                  const listCarError = response2.data;
+                  const response1 = await axios.post(`${hostMysql}/api/getDataErrorCarv1`);
+                  if(response1.data !=='null' && response1.data.length>0)
+                  setDataDPU(response1.data);
+                  else
+                  setDataDPU([])
+                  // const data = response1.data;
+                  // const response2 = await axios.post(`${hostMysql}/api/getDataErrorCar`, {
+                  //       data,
+
+                  // });
+                  // const listCarError = response2.data;
                   
-                  const dpuNoDirt = await axios.post(`${hostMysql}/api/getDataErrorNoDirt`,{data})
-                  const listCarErrorNoDirt = dpuNoDirt.data
-                  const newArray = [];
-                  const newArrayNoDirt=[]
-                  const vinCodes = [];
-                  const vinCodesNoDirt=[]
-                  for (let item of data) {
-                        if (!vinCodes.includes(item.VIN_CODE)) {
-                              const errorItem = listCarError.find(
-                                    (error) => error.error_code === item.VIN_CODE
-                              );
-                              if (errorItem) {
-                                    item.error_type = errorItem.error_type;
-                                    item.error_type_count = errorItem.error_type_count;
-                                    newArray.push(item);
-                                    vinCodes.push(item.VIN_CODE);
-                              }
-                        }
-                  }
-                  for (let item of data) {
-                        if (!vinCodesNoDirt.includes(item.VIN_CODE)) {
-                              const errorItem = listCarErrorNoDirt.find(
-                                    (error) => error.error_code === item.VIN_CODE
-                              );
-                              if (errorItem) {
-                                    item.error_type = errorItem.error_type;
-                                    item.error_type_count = errorItem.error_type_count;
-                                    newArrayNoDirt.push(item);
-                                    vinCodesNoDirt.push(item.VIN_CODE);
-                              }
-                        }
-                  }
-                  setDataDPU(newArray);
-                  setDataDPUNoDirt(newArrayNoDirt)
+                  // const dpuNoDirt = await axios.post(`${hostMysql}/api/getDataErrorNoDirt`, { data })
+                  // const listCarErrorNoDirt = dpuNoDirt.data
+                  // const newArray = [];
+                  // const newArrayNoDirt = []
+                  // const vinCodes = [];
+                  // const vinCodesNoDirt = []
+                  // for (let item of data) {
+                  //       if (!vinCodes.includes(item.VIN_CODE)) {
+                  //             const errorItem = listCarError.find(
+                  //                   (error) => error.error_code === item.VIN_CODE
+                  //             );
+                  //             if (errorItem) {
+                  //                   item.error_type = errorItem.error_type;
+                  //                   item.error_type_count = errorItem.error_type_count;
+                  //                   newArray.push(item);
+                  //                   vinCodes.push(item.VIN_CODE);
+                  //             }
+                  //       }
+                  // }
+                  // for (let item of data) {
+                  //       if (!vinCodesNoDirt.includes(item.VIN_CODE)) {
+                  //             const errorItem = listCarErrorNoDirt.find(
+                  //                   (error) => error.error_code === item.VIN_CODE
+                  //             );
+                  //             if (errorItem) {
+                  //                   item.error_type = errorItem.error_type;
+                  //                   item.error_type_count = errorItem.error_type_count;
+                  //                   newArrayNoDirt.push(item);
+                  //                   vinCodesNoDirt.push(item.VIN_CODE);
+                  //             }
+                  //       }
+                  // }
+                  // console.log(newArray)
+        
+                  //setDataDPUNoDirt(newArrayNoDirt)
             } catch (error) {
-                
+                   console.log(error)
             }
       };
 
@@ -196,15 +202,7 @@ function Dashboard() {
                   }
             });
       };
-      const getDataTimDown = async () => {
-            let time = new Date();
-
-            axios.post(`${host}/api/getDataTimeDown`, { time }).then((res) => {
-                  if (res.data === "null") setDataTimeDown([]);
-                  else if (res.data.length > 0) setDataTimeDown(res.data);
-                
-            });
-      };
+  
       /// function Form antd
       const onFinish = (values) => {
             try {
@@ -226,7 +224,7 @@ function Dashboard() {
             }
       };
       const onFinishFailed = (errorInfo) => {
-           
+
       };
       const handleSubmit = () => {
             formRef.current.submit();
@@ -238,10 +236,10 @@ function Dashboard() {
                         <InformationProduct value={{ dataTarget, dataLineProduct }} />
                   </div>
                   <div className="board">
-                        <ChartDPU value={{ dataDPU, dataTarget,dataDPUNoDirt }} />
+                        <ChartDPU value={{ dataDPU, dataTarget, dataDPUNoDirt }} />
                   </div>
                   <div className="board">
-                        <TimeDown value={{ dataTimeDown }} />
+                        <TimeDown  />
                   </div>
                   <div className="board ">
                         <ChartFTT socket={{ socketFTT }} />
